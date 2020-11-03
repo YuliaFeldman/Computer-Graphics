@@ -1,0 +1,132 @@
+﻿#pragma kernel CSMain
+
+// Shader parameters
+RWTexture2D<float4> Result; // RenderTexture onto which the scene is rendered
+float4x4 _CamToWorld; // Unity Camera to World transformation matrix
+float4x4 _CamInverseProjection; // Inverse of Unity's Camera projection matrix
+Texture2D<float4> _SkyboxTexture; // Skybox texture
+SamplerState sampler_SkyboxTexture; // Skybox texture sampler
+float4 _DirectionalLight; // Direction of the light, encoded in the xyz components
+int _BounceLimit; // Number of bounces (reflections or refractions) allowed per ray
+int _SceneIndex; // Index of the scene to display
+
+// Constants
+static const float PI = 3.14159265f;
+static const float EPS = 0.0001f;
+static const float SHININESS = 50;
+
+// Imports
+#include "UnityCG.cginc" // Unity shader library
+#include "Ray.cginc" // Ray, RayHit and Material struct definitions
+#include "Primitives.cginc" // Functions to detect collisions with geometric primitives
+#include "Shading.cginc" // Functions to aid in shading
+#include "Scenes.cginc" // Scene definitions
+
+
+// Casts a given ray into the currently selected scene
+// Returns a the closest collision to the ray origin, i.e. the "Best Hit"
+RayHit intersectScene(Ray ray)
+{
+    switch(_SceneIndex)
+    {
+    case 1:
+        return intersectScene1(ray);
+    case 2:
+        return intersectScene2(ray);
+    case 3:
+        return intersectScene3(ray);
+    case 4:
+        return intersectScene4(ray);
+    default:
+        return intersectScene0(ray);
+    }
+}
+
+// Returns the color associated with the given ray and hit point 
+float3 shadeHit(Ray ray, RayHit hit)
+{
+    float3 l = -  _DirectionalLight.xyz;
+    Ray shadow_ray = CreateRay(hit.position + (hit.normal*EPS) , l, float3(1,1,1));
+    RayHit result = intersectScene(shadow_ray);
+    float vp = 0; //the point is in shadow.
+    if (isinf(result.distance)) // no hit: the point is not in shadow.
+    {
+        vp = 1;
+    }
+ 
+    return vp*blinnPhong(hit.normal, -ray.direction, l , SHININESS, hit.material.albedo);
+   
+}
+
+// Returns the color associated with the given ray that has missed all geometry
+float3 shadeMiss(Ray ray)
+{
+    return sampleSkybox(ray.direction);   
+}
+
+// Traces the given ray in the currently selected scene
+// Returns the color associated with the given ray
+// Edits the given ray accordingly
+float3 trace(inout Ray ray)
+{
+    RayHit hit = intersectScene(ray);
+    float3 energy = ray.energy;
+    if (isinf(hit.distance))
+    {
+        ray.energy = 0;
+        return shadeMiss(ray) * energy;
+       
+    }
+    else 
+    {
+        float3 c_hit = shadeHit(ray, hit) * energy;
+        if (hit.material.refractiveIndex == -1)
+        {
+            reflectRay(ray, hit);
+            
+        }
+        else
+        {
+            refractRay(ray, hit);
+        }
+        
+        
+
+        return c_hit;
+
+    }
+
+
+
+}
+
+// Creates and traces a view ray for each image pixel, then sets the
+// associated pixel's color according to the ray's journey throughout the scene 
+[numthreads(8,8,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    // Get the RenderTexture dimensions
+    uint width, height;
+    Result.GetDimensions(width, height);
+
+    // Transform pixel to UV [-1, 1] range
+    float2 pixelOffset = 0.5;
+    float2 uv = float2((id.xy + pixelOffset) / float2(width, height) * 2.0f - 1.0f);
+
+    // Create a view ray and trace it
+    Ray ray = CreateViewRay(uv);
+
+    float3 result = 0;
+    for (int i = 0; i < _BounceLimit; i++)
+    {
+        result += trace(ray);
+        if (!any(ray.energy))
+        {
+            break;
+        }
+            
+    }
+    
+    // Set pixel color
+    Result[id.xy] = float4(result, 1);
+}
