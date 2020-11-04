@@ -59,13 +59,13 @@
 
                     //Diffuse Reflectance
                     float3 n = normalize(mul(unity_ObjectToWorld, normalize(input.normal)));
-                    float4 l = normalize(_WorldSpaceLightPos0);
+                    float3 l = normalize(_WorldSpaceLightPos0);
                     fixed4 color_d = max(dot(n, l), 0) * _DiffuseColor * _LightColor0;
 
                     //Specular Reflectance
                     float4 posWorld = mul(unity_ObjectToWorld, input.vertex);
-                    float4 v = normalize(float4(_WorldSpaceCameraPos, 0) - posWorld);
-                    float4 h = normalize((v + l) / 2);
+                    float3 v = normalize(_WorldSpaceCameraPos - posWorld.xyz);
+                    float3 h = normalize(v + l);
                     fixed4 color_s = pow(max(dot(n, h), 0), _Shininess) * _SpecularColor * _LightColor0;
 
                     //final output
