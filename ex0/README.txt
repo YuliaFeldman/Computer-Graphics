@@ -4,4 +4,4 @@ In this exercise we created a small game in which the player controls a sphere t
 
 (Note: this exercise was not for submission)
 
-![Alt text](https://github.com/YuliaFeldman/Computer-Graphics/blob/master/ex0/img1.png?raw=true )
+![Alt text](img1.png?raw=true )
