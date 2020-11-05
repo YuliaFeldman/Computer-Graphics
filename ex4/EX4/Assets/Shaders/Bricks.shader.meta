@@ -2,7 +2,10 @@ fileFormatVersion: 2
 guid: db452d19ad6aa42888e26518ed5ac5f7
 ShaderImporter:
   externalObjects: {}
-  defaultTextures: []
+  defaultTextures:
+  - _AlbedoMap: {fileID: 2800000, guid: 493fe3a115fbc403aaa0a787c1a96306, type: 3}
+  - _SpecularMap: {fileID: 2800000, guid: 7f8bd21fffbf94d1385de9455df4881f, type: 3}
+  - _HeightMap: {fileID: 2800000, guid: 4a840eb872e744938bcd0a9aa7d0817a, type: 3}
   nonModifiableTextures: []
   userData: 
   assetBundleName: 

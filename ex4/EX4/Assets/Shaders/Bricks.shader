@@ -34,18 +34,19 @@ Shader "CG/Bricks"
                 struct appdata
                 { 
                     float4 vertex   : POSITION;
-                    float3 normal   : NORMAL;
-                    float4 tangent  : TANGENT;
                     float2 uv       : TEXCOORD0;
+                    float4 tangent  : TEXCOORD1;
+                    float3 normal   : NORMAL;
+                    
                 };
 
                 struct v2f
                 {
                     float4 pos : SV_POSITION;
                     float2 uv: TEXCOORD0;
+                    float4 tangent: TEXCOORD1;
+                    float4 vertex: TEXCOORD2;
                     float3 normal: NORMAL;
-                    float4 vertex: TEXCOORD1;
-                    float4 tangent: TANGENT;
                 };
 
                 v2f vert (appdata input)
@@ -67,7 +68,7 @@ Shader "CG/Bricks"
 
                     bumpMapData i;
                     i.normal = n;
-                    i.tangent = mul(unity_ObjectToWorld, input.tangent);;
+                    i.tangent = mul(unity_ObjectToWorld, normalize(input.tangent));
                     i.du = _HeightMap_TexelSize.x;
                     i.dv = _HeightMap_TexelSize.y;
                     i.uv = input.uv;
