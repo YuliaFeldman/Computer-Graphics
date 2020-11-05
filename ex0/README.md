@@ -4,6 +4,4 @@ In this exercise we created a small game in which the player controls a sphere t
 
 (Note: this exercise was not for submission)
 
-![solarized palette](https://github.com/altercation/solarized/raw/master/img/solarized-palette.png)
 
-![solarized vim](https://github.com/altercation/solarized/raw/master/img/solarized-vim.png)
