@@ -5,6 +5,7 @@ In this exercise I created different materials using texturing techniques such a
 The goal of this exercise was to learn about shaders, texturing, UV mapping, displacement mapping and more.
 
 
+
 ### Some examples:
 The bricks shader was implemented using albedo mapping, specular mapping and bump mapping.
 The earth shader was implemented using spherical texture mapping.
