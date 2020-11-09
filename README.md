@@ -17,7 +17,6 @@ Ex 5 - Ray Tracing
 
 ![picture](img5.png)
 
-
 For additional information see the README file of each project.
 
 
