@@ -3,7 +3,7 @@
 
 In this exercise I created different materials using texturing techniques such as Perlin noise and Value noise.
 The goal of this exercise was to learn about shaders, texturing, UV mapping, displacement mapping and more.
-<br /> <br />
+<br /> <br /> <br />
 
 
 ### Some examples:
