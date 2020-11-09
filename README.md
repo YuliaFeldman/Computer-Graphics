@@ -1,6 +1,6 @@
 # Computer-Graphics
 
-### All of the projects were created as part of the Computer Graphics 2020 course @ Hebrew University of Jerusalem
+#### All of the projects were created as part of the Computer Graphics 2020 course @ Hebrew University of Jerusalem
 
 Ex 0 - Intro to Unity
 
