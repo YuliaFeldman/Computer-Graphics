@@ -14,4 +14,5 @@ The goal of this exercise was to learn about subdivision surfaces and working wi
 ![picture](img3C.png)
 
 4)  The cube object after a few more runs.
+
 ![picture](img4D.png)
