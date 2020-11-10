@@ -15,7 +15,7 @@ Ex 4 - subdivision
 Ex 5 - Ray Tracing
 
 
-For additional information see the README file of each project.
+For additional information see the README file of each project. <br />
 
 
 ![picture](img5.png)
